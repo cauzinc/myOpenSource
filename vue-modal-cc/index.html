@@ -55,7 +55,14 @@
 				});
 			},
 			showMyDialog(options) {
-				this.modal.showDialog();
+				this.modal.showDialog({
+                    confirm() {
+                    	console.log('confirm');
+                    },
+                    cancel() {
+                    	console.log('cancel');
+                    }
+                });
 			},
 		}
 	});

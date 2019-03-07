@@ -3,8 +3,8 @@
         <div class="modal--main" >
             <p class="msg-area">{{message}}</p>
             <div class="btn-area">
-                <button class="btn" @click="confirm()">取消</button>
-                <button class="btn" @click="cancel()">确认</button>
+                <button class="btn" @click="_cancel()">取消</button>
+                <button class="btn" @click="_confirm()">确认</button>
             </div>
         </div>
     </section>
@@ -16,26 +16,22 @@
 		data() {
 			return {
 				visible: false,
-				message: "hello world",
-				animation: {
-					animationDuration: '0.3s'
-				},
-                obj: {
-					opacity: 1
-                }
+				message: "hello world"
 			}
 		},
         methods: {
-			confirm() {
+			_confirm() {
 				this.visible = false;
 				setTimeout(() => {
+					this.confirm && this.confirm();
 					document.body.removeChild(this._self)
                 }, 300);
 
             },
-            cancel() {
+            _cancel() {
 	            this.visible = false;
 	            setTimeout(() => {
+		            this.cancel && this.cancel();
 		            document.body.removeChild(this._self)
 	            }, 300);
             }
@@ -110,7 +106,7 @@
                     line-height: 45px;
                     text-align: center;
                     outline: none;
-                    color: #b3b3b3;
+                    color: #666;
                     &:first-child {
                         border-right: 1px solid #b3b3b3;
                     }

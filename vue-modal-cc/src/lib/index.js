@@ -1,4 +1,3 @@
-import Toast from './templates/toast.vue'
 let templates = require.context('./templates', false);
 
 //  以单例模式设计的，用于vue组件中加载模态框的工具
@@ -46,14 +45,15 @@ let Modal = {
 				}, transition + duration);
 			},
 			showDialog(options = {}) {
+				let { confirm, cancel } = options;
 				let instance = new self._ComponentClasses.Dialog().$mount(document.createElement('div'));  // 创建一个新的实例
 				document.body.appendChild(instance.$el);
 				instance._self = instance.$el;
+				instance.confirm = confirm;
+				instance.cancel = cancel;
 				setTimeout(() => {
 					instance.visible = true;
 				}, 0);
-
-
 			}
 		}
 	}
