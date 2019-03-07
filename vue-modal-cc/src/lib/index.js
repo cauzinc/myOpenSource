@@ -27,7 +27,7 @@ let Modal = {
 		let self = this;
 		this.ModalHandler = {
 			showToast(options = {}) {
-				let { duration = 2000, transition = 200, message = '', success = function() {} } = options;
+				let { duration = 1000, transition = 200, message = '', success = function() {} } = options;
 				let animationDuration = transition/1000 + 's';
 
 				let instance = new self._ComponentClasses.Toast().$mount(document.createElement('div'));  // 创建一个新的实例
@@ -46,6 +46,13 @@ let Modal = {
 				}, transition + duration);
 			},
 			showDialog(options = {}) {
+				let instance = new self._ComponentClasses.Dialog().$mount(document.createElement('div'));  // 创建一个新的实例
+				document.body.appendChild(instance.$el);
+				instance._self = instance.$el;
+				setTimeout(() => {
+					instance.visible = true;
+				}, 0);
+
 
 			}
 		}
