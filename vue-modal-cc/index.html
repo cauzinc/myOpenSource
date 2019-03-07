@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Instance</title>
+    <style>
+        .fade {
+            animation: fade-in 0.5s ease-in-out;
+        }
+        @keyframes fade-in {
+            0% {
+                opacity: 0;
+                transform: scale(0.7);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+    <a href="javascript:;" @click="showMyToast()">show toast</a> <br>
+    <a href="javascript:;" @click="showMyToast({ duration: 5000 })">show toast in 5 seconds</a> <br>
+    <a href="javascript:;" @click="showMyToastWidthCb()">show toast with callback function</a> <br>
+</div>
+<script src="./node_modules/vue/dist/vue.js"></script>
+<script src="./dist/index.js"></script>
+<script>
+    new Vue({
+        el: "#app",
+        data: {
+            modal: null
+        },
+        created() {
+	        this.modal = this.getModalHandler();
+        },
+        methods: {
+        	showMyToast(options) {
+        		this.modal.showToast(options);
+            },
+	        showMyToastWidthCb() {
+        		let cb = () => {
+        			console.log('over');
+                };
+		        this.modal.showToast({
+                    success: cb
+                });
+            }
+        }
+    });
+</script>
+</body>
+</html>
