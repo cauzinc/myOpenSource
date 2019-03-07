@@ -1,11 +1,12 @@
-import Toast from './toast.vue'
+import Toast from './templates/toast.vue'
+let templates = require.context('./templates', false);
 
 //  以单例模式设计的，用于vue组件中加载模态框的工具
 let Modal = {
 	ModalHandler: null,
 	//  存放所有Vue实例模板
 	_ComponentClasses: {},
-
+	_templates: {},
 	install(Vue, options) {
 		if(this.installed) {
 			return
@@ -18,7 +19,9 @@ let Modal = {
 			}
 			return self.ModalHandler
 		};
-		this._ComponentClasses.Toast = Vue.extend(Toast);
+		Object.keys(this._templates).forEach(key => {
+			this._ComponentClasses[key] = Vue.extend(this._templates[key]);
+		})
 	},
 	initModalHandler() {
 		let self = this;
@@ -41,10 +44,23 @@ let Modal = {
 						success && success();
 					}, transition);
 				}, transition + duration);
+			},
+			showDialog(options = {}) {
+
 			}
 		}
 	}
 };
+
+// 初始化默认模板
+function initDefaultTemplates() {
+	templates.keys().map(file => {
+		Modal._templates[templates(file).default.name] = templates(file).default;
+	});
+}
+
+initDefaultTemplates();
+
 
 if(window.Vue) {
 	Vue.use(Modal);
