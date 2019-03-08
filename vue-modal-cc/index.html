@@ -32,15 +32,18 @@
     <a href="javascript:;" onclick="test()">test</a> <br>
 </div>
 <script src="./node_modules/vue/dist/vue.js"></script>
-<script src="./dist/index.js"></script>
+<!--<script src="./dist/index.js"></script>-->
+<script src="./src/lib/index.js"></script>
+
 <script>
+    Vue.use(Modal, './src/lib/templates');
 	new Vue({
 		el: "#app",
 		data: {
 			modal: null
 		},
 		created() {
-			this.modal = this.getModalHandler();
+			// this.modal = this.getModalHandler();
 		},
 		methods: {
 			showMyToast(options) {

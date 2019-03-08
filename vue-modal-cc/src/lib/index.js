@@ -1,16 +1,21 @@
-let templates = require.context('./templates', false);
-
 //  以单例模式设计的，用于vue组件中加载模态框的工具
 let Modal = {
 	ModalHandler: null,
 	//  存放所有Vue实例模板
 	_ComponentClasses: {},
 	_templates: {},
-	install(Vue, options) {
+	_ComponentPath: "",
+	_default: ['Toast', 'Dialog'],
+	$Vue: null,
+	install(Vue, options = {}) {
 		if(this.installed) {
 			return
 		}
+		if(!this.$Vue) {
+			this.$Vue = Vue;
+		}
 		let self = this;
+
 		//  将获取实例的方法封装到Vue原型中，用户无法直接操作Modal Object
 		Vue.prototype.getModalHandler = function() {
 			if(!self.ModalHandler) {
@@ -20,7 +25,16 @@ let Modal = {
 		};
 		Object.keys(this._templates).forEach(key => {
 			this._ComponentClasses[key] = Vue.extend(this._templates[key]);
-		})
+		});
+		if(options.modules && options.modules.length) {
+			options.modules.forEach(module => {
+				if(this._default.indexOf(module.name) > -1) {
+					this._ComponentClasses['_' + module.name] = Vue.extend(module);
+				} else {
+					this._ComponentClasses[module.name] = Vue.extend(module);
+				}
+			})
+		}
 	},
 	initModalHandler() {
 		let self = this;
@@ -54,23 +68,44 @@ let Modal = {
 				setTimeout(() => {
 					instance.visible = true;
 				}, 0);
+			},
+			show(name) {
+				let div = document.createElement('div');
+				//  set modal container's style
+				div.style.position = 'absolute';
+				div.style.top = '0';
+				div.style.bottom = '0';
+				div.style.left = '0';
+				div.style.right = '0';
+				div.style.zIndex = '2000';
+				div.style.display = 'flex';
+				div.style.justifyContent = 'center';
+				div.style.alignItems = 'center';
+				div.style.background = 'rgba(0, 0, 0, 0.6)';
+				div.style.opacity = '0';
+				div.style.transition = 'all .3s ease-out';
+				//  init modal--container
+				let instance = new self._ComponentClasses[name]().$mount();
+				// let Test = self.$Vue.extend(test);
+				// let instance = new Test().$mount();
+				div.appendChild(instance.$el);
+				document.body.appendChild(div);
+				setTimeout(() => {
+					div.style.opacity = '1';
+				}, 0)
 			}
 		}
 	}
 };
 
 // 初始化默认模板
-function initDefaultTemplates() {
+function initDefaultTemplates(path) {
+	let templates = require.context('./templates', false);
 	templates.keys().map(file => {
 		Modal._templates[templates(file).default.name] = templates(file).default;
 	});
 }
-
 initDefaultTemplates();
 
-
-if(window.Vue) {
-	Vue.use(Modal);
-}
 
 export default Modal
