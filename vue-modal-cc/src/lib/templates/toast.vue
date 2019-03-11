@@ -2,7 +2,7 @@
     <section class="modal--container">
         <div class="modal--main"
              :class="[ visible ? 'modal--fade--in' : 'modal--fade--out']"
-             :style="{ animationDuration: animation.animationDuration }">
+             :style="{ transitionDuration: animation.transitionDuration }">
             <span>{{message}}</span>
         </div>
     </section>
@@ -11,15 +11,15 @@
 <script>
 	export default {
 		name: "Toast",
-        data() {
+		data() {
 			return {
 				visible: false,
 				message: "hello world",
-                animation: {
-				    animationDuration: '0.3s'
-                }
-            }
-        }
+				animation: {
+					transitionDuration: '0.3s'
+				}
+			}
+		}
 	}
 </script>
 
@@ -43,14 +43,21 @@
             text-align: center;
             border-radius: 8px;
             animation-timing-function: ease-out;
+            transition-property: all;
+            transition-timing-function: ease-in-out;
+            opacity: 0;
+            transform: scale(0.7);
         }
     }
 
     .modal--fade--in {
-        animation-name: fade--in;
+        opacity: 1 !important;
+        transform: scale(1) !important;;
+
     }
     .modal--fade--out {
-        animation-name: fade--out;
+        opacity: 0;
+        transform: scale(0.7);
     }
     @keyframes fade--in {
         from {
