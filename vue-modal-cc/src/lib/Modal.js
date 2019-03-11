@@ -1,5 +1,9 @@
-import { bind } from './utils.js'
+import { bind, throttle } from './utils'
+import { mixinProps, mixinInvokers, checkIsDefaultTemplate } from './init'
+
 class ModalHandler {
+	_modules;
+	_crtDisplayEl;
 	constructor(modules) {
 		//  ensure constructor's safety
 		if(this instanceof ModalHandler) {
@@ -19,7 +23,6 @@ class ModalHandler {
 		instance.message = message || 'hello world';
 		instance.animation.transitionDuration = transitionDuration;
 		document.body.appendChild(instance.$el);
-		console.log('time', transition, duration);
 		setTimeout(() => {
 			instance.visible = true;
 		}, 0);
@@ -41,10 +44,21 @@ class ModalHandler {
 		instance.cancel = cancel;
 		setTimeout(() => {
 			instance.visible = true;
-		}, 0);
+		}, 10);
 	}
-	show(name) {
+	show(name, opt = {}) {
+
+		let { props, invokers, options } = opt;
+		//  check if instance exist or conflict with default template
+		if(checkIsDefaultTemplate(name)) {
+			name = '_' + name
+		}
+		if(!this._modules[name]) {
+			return
+		}
+		let instance = new this._modules[name]().$mount();
 		let div = document.createElement('div');
+
 		//  set modal container's style
 		div.style.position = 'absolute';
 		div.style.top = '0';
@@ -58,27 +72,59 @@ class ModalHandler {
 		div.style.background = 'rgba(0, 0, 0, 0.6)';
 		div.style.opacity = '0';
 		div.style.transition = 'all .3s ease-out';
+
 		//  init modal--container
-		let instance = new this._modules[name]().$mount();
+
 		div.appendChild(instance.$el);
 		document.body.appendChild(div);
 		this._crtDisplayEl = div;
+
 		//  ensure closeDisplayEl always work in modalHandler context
-		instance.$close = bind(this.closeDisplayEl, this);
+		//  check if developer has defined the function
+		let closeFn = bind(this.closeDisplayEl, this);
+		if(!instance.$close) {
+			instance.$close = closeFn;
+		} else if (typeof instance.$close === 'function') {
+			//  if $close is registered as a function, we could mixin our function body into it
+			let originClose = instance.$close;
+			instance.$close = function() {
+				originClose(...arguments);
+				return closeFn();
+			}
+		}
+
+		//  initProps: only when the key is registered as prop, we set the value
+		mixinProps(instance, props);
+
+		//  init invokers
+		mixinInvokers(instance, invokers);
+
+		//  bind func into _events so that vm could invoke the func by $emit(),
+		//  ensure user could close the modal in case developer defined $close(), vm.$emit() will invoke functions in order
+		if(!instance._events['close']) {
+			instance._events['close'] = [];
+		}
+		instance._events['close'].push(bind(this.closeDisplayEl, this));
+
 
 		setTimeout(() => {
 			div.style.opacity = '1';
 		}, 0)
 	}
 	closeDisplayEl() {
+		//  sometimes user will click continuously, so suggestion is apply a throttle to your fn which calls this.$close()
 		if(!this._crtDisplayEl) {
 			return
 		}
-		document.body.removeChild(this._crtDisplayEl);
+		let ele = this._crtDisplayEl;
 		this._crtDisplayEl = null;
-	}
-	setCrtDisplayEl(el) {
-		this._crtDisplayEl = el;
+		return new Promise((resolve, reject) => {
+			ele.style.opacity = '0';
+			setTimeout(() => {
+				document.body.removeChild(ele);
+				resolve(this);
+			}, 300);
+		})
 	}
 }
 export default ModalHandler
