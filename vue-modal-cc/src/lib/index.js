@@ -1,11 +1,12 @@
 import ModalHandler from './Modal'
-import { initDefaultTemplate } from './init'
+import { initDefaultTemplate, mixinVueModules } from './init'
 
 //  a tool to show modal with custom component, designed by single instance
 let Modal = {
 	_default: ['Toast', 'Dialog'],
 	$Vue: null,
 	_instance: null,
+	installed: false,
 	install(Vue, options = {}) {
 		if(this.installed) {
 			return
@@ -14,22 +15,13 @@ let Modal = {
 			this.$Vue = Vue;
 		}
 		let self = this,
-			_defaultTemplates = {},
 			_ComponentClasses = {};
-		_defaultTemplates = initDefaultTemplate();
 
 		//  init default
-		Object.keys(_defaultTemplates).forEach(key => {
-			_ComponentClasses[key] = Vue.extend(_defaultTemplates[key]);
-		});
+		_ComponentClasses = initDefaultTemplate(Vue);
+		//	mixin user modules
 		if(options.modules && options.modules.length) {
-			options.modules.forEach(module => {
-				if(this._default.indexOf(module.name) > -1) {
-					_ComponentClasses['_' + module.name] = Vue.extend(module);
-				} else {
-					_ComponentClasses[module.name] = Vue.extend(module);
-				}
-			})
+			_ComponentClasses = mixinVueModules(_ComponentClasses, options.modules, Vue);
 		}
 
 		//  将获取实例的方法封装到Vue原型中，用户无法直接操作Modal Object
@@ -39,9 +31,8 @@ let Modal = {
 			}
 			return self._instance
 		};
-
+		this.installed = true;
 	}
 };
-
 
 export default Modal

@@ -1,8 +1,29 @@
-// bind function and context
 let bind = function(func, context) {
 	return function() {
-		func.apply(context, arguments);
+		return func.apply(context, arguments);
 	}
 };
 
-export { bind }
+let checkIfDataAnObject = function(data) {
+	return Object.prototype.toString.call(data) === '[object Object]';
+};
+
+let checkIfDataAnArray = function() {
+	return Object.prototype.toString.call(data) === '[object Array]';
+};
+
+let throttle = function(func, context, interval) {
+	let methodId = null;
+	return function() {
+		let args = arguments;
+		if(!methodId) {
+			methodId = setTimeout(function() {
+				methodId = null;
+				func.call(context,...args);
+			}, interval)
+		}
+
+	}
+};
+
+export { bind, checkIfDataAnObject, checkIfDataAnArray, throttle }
