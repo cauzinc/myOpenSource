@@ -2,8 +2,6 @@ import { bind, throttle } from './utils'
 import { mixinProps, mixinInvokers, checkIsDefaultTemplate } from './init'
 
 class ModalHandler {
-	_modules;
-	_crtDisplayEl;
 	constructor(modules) {
 		//  ensure constructor's safety
 		if(this instanceof ModalHandler) {

@@ -32,17 +32,24 @@
     <a href="javascript:;" onclick="test()">test</a> <br>
 </div>
 <script src="./node_modules/vue/dist/vue.js"></script>
-<!--<script src="./dist/index.js"></script>-->
-<script src="./src/lib/index.js"></script>
+<script src="./dist/index.js"></script>
+<!--<script src="./src/lib/index.js"></script>-->
+ls
 
 <script>
-    Vue.use(Modal, './src/lib/templates');
+
+    // define(['./dist/index'], function(modal) {
+	 //    Vue.use(Modal, './src/lib/templates');
+    // })
+    // let Modal = require('./dist/index');
+    // Vue.use(Modal);
 	new Vue({
 		el: "#app",
 		data: {
 			modal: null
 		},
 		created() {
+			console.log('created')
 			// this.modal = this.getModalHandler();
 		},
 		methods: {

@@ -5,10 +5,11 @@ module.exports = {
 	mode: "production",
 	entry: './src/lib/index.js',
 	output: {
-		path: path.join(__dirname, 'dist'),
 		filename: "index.js",
-		libraryTarget: "umd",   // 可以让用户以各种方式使用我们的文件
-		library: "vueModalHandler"
+		library: "vue-modal-caller",
+		libraryTarget: "umd",
+		path: path.join(__dirname, 'dist')
+
 	},
 	module: {
 		rules: [

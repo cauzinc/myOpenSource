@@ -1,13 +1,22 @@
 {
-  "name": "vue-modal-cc",
-  "version": "1.0.0",
-  "description": "an easy way to call a modal for vue",
-  "main": "index.js",
+  "name": "vue-modal-caller",
+  "version": "1.0.1",
+  "description": "an easy way to call a modal for vue.js",
+  "main": "dist/index.js",
+  "keywords": [
+    "vue-modal",
+    "component",
+    "front-end",
+    "single-instance"
+  ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack"
   },
-  "author": "cauzinc",
+  "bugs": {
+    "url": "https://github.com/cauzinc/myOpenSource/issues"
+  },
+  "author": "cauzinc<cauzinchu@gmail.com>",
   "license": "ISC",
   "devDependencies": {
     "@babel/core": "^7.3.4",
