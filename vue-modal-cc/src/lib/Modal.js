@@ -16,7 +16,7 @@ class ModalHandler {
 		let { duration = 1000, transition = 300, message = '', success = function() {} } = options;
 		let transitionDuration = transition/1000 + 's';
 
-		let instance = new this._modules.Toast().$mount(document.createElement('div'));  // 创建一个新的实例
+		let instance = new this._modules.Toast().$mount(document.createElement('div'));
 
 		instance.message = message || 'hello world';
 		instance.animation.transitionDuration = transitionDuration;
@@ -35,7 +35,7 @@ class ModalHandler {
 	}
 	showDialog(options = {}) {
 		let { confirm, cancel } = options;
-		let instance = new this._modules.Dialog().$mount(document.createElement('div'));  // 创建一个新的实例
+		let instance = new this._modules.Dialog().$mount(document.createElement('div'));
 		document.body.appendChild(instance.$el);
 		instance._self = instance.$el;
 		instance.confirm = confirm;
@@ -58,7 +58,7 @@ class ModalHandler {
 		let div = document.createElement('div');
 
 		//  set modal container's style
-		div.style.position = 'absolute';
+		div.style.position = 'fixed';
 		div.style.top = '0';
 		div.style.bottom = '0';
 		div.style.left = '0';
