@@ -24,8 +24,8 @@ let Modal = {
 			_ComponentClasses = mixinVueModules(_ComponentClasses, options.modules, Vue);
 		}
 
-		//  将获取实例的方法封装到Vue原型中，用户无法直接操作Modal Object
-		Vue.prototype.getModalHandler = function() {
+		//  prevent user from manipulating Modal Class, they could only use the singular object with method attached into Vue.prototype
+		Vue.prototype.$getModalHandler = function() {
 			if(!self._instance) {
 				self._instance = new ModalHandler(_ComponentClasses);
 			}
