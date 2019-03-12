@@ -4,6 +4,10 @@ import Toast from './templates/toast.vue'
 
 let defaultTemplate = ['Toast', 'Dialog'];
 
+//  这里有一个很大的问题，Vue.extend() 只继承了最基础的Vue对象，获得了他的原型
+//  但是一个单页面组件的Vue项目，main.js中 new Vue({}）中传入的内容我们全都获取不到，比如$router, $store
+//  所以我们应该用main.js中的new Vue()为父类，来实现继承
+
 let initDefaultTemplate = function(Vue) {
 	let defaultTemplates = { Dialog, Toast };
 	let ComponentClasses = {};
