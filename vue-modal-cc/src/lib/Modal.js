@@ -45,6 +45,10 @@ class ModalHandler {
 		}, 10);
 	}
 	show(name, opt = {}) {
+		//  close crt modal when open a new one
+		if(this._crtDisplayEl) {
+			this.closeDisplayEl()
+		}
 
 		let { props, invokers, options } = opt;
 		//  check if instance exist or conflict with default template
@@ -76,7 +80,6 @@ class ModalHandler {
 		div.appendChild(instance.$el);
 		document.body.appendChild(div);
 		this._crtDisplayEl = div;
-
 		//  ensure closeDisplayEl always work in modalHandler context
 		//  check if developer has defined the function
 		let closeFn = bind(this.closeDisplayEl, this);
