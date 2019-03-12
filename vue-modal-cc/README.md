@@ -138,13 +138,13 @@ You can also close your modal by using $emit('close'), but it won't send Promise
 
 The default modal injected are toast and dialog. You can call them: 
 
-* Vue.prototype.\$modal.showDialog({
-&emsp;&emsp;  confirm: Function,  // the method invoked by 'confirm'
-&emsp;&emsp;  cancel: Function  // the method invoked by 'cancel'
-});
-* Vue.prototype.\$modal.showToast({
-  &emsp;&emsp;message: String
-});
+* Vue.prototype.\$modal.showDialog({  
+&emsp;&emsp;  confirm: Function,  // the method invoked by 'confirm'  
+&emsp;&emsp;  cancel: Function  // the method invoked by 'cancel'  
+});   
+* Vue.prototype.\$modal.showToast({  
+  &emsp;&emsp;message: String  
+});   
 
 The recommend is to create your general toast and dialog. Your modal could also named with 'toast' or 'dialog', and it won't conflict width default modal.
 
