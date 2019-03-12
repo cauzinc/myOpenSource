@@ -1,6 +1,6 @@
 {
   "name": "vue-modal-caller",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "description": "an easy way to call a modal for vue.js",
   "main": "dist/index.js",
   "keywords": [
